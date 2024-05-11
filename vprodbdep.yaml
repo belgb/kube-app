@@ -15,36 +15,36 @@ spec:
         app: vprodb
     spec:
       containers:
-      - name: vprodb
-        image: belgb/vpofiledb:V2
-        volumeMounts:
-        - mountPath: /var/lib/mysql
-          name: vpro-db-data
-        resources:
-          limits:
-            memory: "256Mi"
-            cpu: "500m"
-        ports:
-        - name: vprodb-port
-          containerPort: 3306
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: app-secret
-              key: db-pass
+        - name: vprodb
+          image: belgb/vpofiledb:V2
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: vpro-db-data
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          ports:
+            - name: vprodb-port
+              containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: db-pass
       nodeSelector: 
         zone: us-west-2a
       volumes:
-      - name: vpro-db-data
-        awsElasticBlockStore:
-          volumeID: vol-0baa608217f3e5cd8
-          fsType: ext4
-      initContainers:
-      - name: busybox
-        image: busybox:latest
-        args: ["rm", "-rf", "var/lib/mysql/lost+found"]
-        volumeMounts:
         - name: vpro-db-data
-          mountPath: /var/lib/mysql
+          awsElasticBlockStore:
+            volumeID: vol-0baa608217f3e5cd8
+            fsType: ext4
+      initContainers:
+        - name: busybox
+          image: busybox:latest
+          args: ["rm", "-rf", "var/lib/mysql/lost+found"]
+          volumeMounts:
+            - name: vpro-db-data
+              mountPath: /var/lib/mysql
       
