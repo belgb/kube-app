@@ -16,14 +16,10 @@ spec:
     spec:
       containers:
         - name: vprodb
-          image: belgb/vpofiledb:V2
+          image: belgb/vpofiledb:V3
           volumeMounts:
             - mountPath: /var/lib/mysql
               name: vpro-db-data
-          resources:
-            limits:
-              memory: "1024Mi"
-              cpu: "500m"
           ports:
             - name: vprodb-port
               containerPort: 3306
@@ -33,6 +29,8 @@ spec:
                 secretKeyRef:
                   name: app-secret
                   key: db-pass
+            - name: MYSQL_DEFAULT_USER
+              value: "guest"
       nodeSelector: 
         zone: us-west-2a
       volumes:
