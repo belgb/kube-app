@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: vprodb
-        image: belgb/vpofiledb:latest
+        image: belgb/vpofiledb:V2
         volumeMounts:
         - mountPath: /var/lib/mysql
           name: vpro-db-data
